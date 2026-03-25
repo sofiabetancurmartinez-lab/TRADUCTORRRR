@@ -1,7 +1,7 @@
 
 streamlit
 gTTS==2.2.2
-deep-translator==1.17.4
+deep-translator==1.11.4
 
 Jinja2 >=2.9
 contourpy >=1
