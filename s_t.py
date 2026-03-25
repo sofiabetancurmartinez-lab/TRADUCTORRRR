@@ -12,7 +12,18 @@ import glob
 
 
 from gtts import gTTS
-from deep_translator import GoogleTranslator
+
+try:
+    from deep_translator import GoogleTranslator
+    translator_backend = 'deep_translator'
+except ImportError:
+    try:
+        from googletrans import Translator as GoogleTranslator
+        translator_backend = 'googletrans'
+    except ImportError as exc:
+        raise ImportError(
+            "Install dependency first: pip install deep-translator or googletrans"
+        ) from exc
 
 
 st.title("TRADUCTOR.")
@@ -144,7 +155,11 @@ if result:
     
     
     def text_to_speech(input_language, output_language, text, tld):
-        trans_text = GoogleTranslator(source=input_language, target=output_language).translate(text)
+        if translator_backend == 'deep_translator':
+            trans_text = GoogleTranslator(source=input_language, target=output_language).translate(text)
+        else:
+            trans_text = GoogleTranslator().translate(text, src=input_language, dest=output_language).text
+
         tts = gTTS(trans_text, lang=output_language, tld=tld, slow=False)
         try:
             my_file_name = text[0:20]
